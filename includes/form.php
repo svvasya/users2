@@ -231,7 +231,7 @@
 
 
 <div class="modal" tabindex="-1" role="dialog" id="delete-form-modal">
-						  <div class="modal-dialog" role="document">
+						  <div class="modal-dialog modal-dialog-del" role="document">
 						  <div class="modal-content del-modal-content">
 						  <div class="modal-header">
 						  <h5 class="modal-title">Delete user</h5>
