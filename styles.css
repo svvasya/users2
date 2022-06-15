@@ -1,0 +1,22 @@
+body{
+  margin-top:20px;
+  background:#f8f8f8
+}
+.active-circle {
+  color: green;
+}
+.not-active-circle {
+  color: #b0b0b0;
+}
+.select-block{
+	
+	padding: 0px 50px;
+}
+
+.btn-main {
+	    padding: 0px 10px;
+		width: 60px;
+}
+select.btn-sm.btn-outline-secondary.badge {
+    text-align: left;
+}
