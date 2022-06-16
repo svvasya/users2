@@ -43,7 +43,9 @@ foreach ($res as $items){
 }
 
 $result = array(
-            'users' => $users
+			'status' => true,
+			'error' => null,
+            'users' => $users,
             
 
         );
