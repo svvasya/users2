@@ -166,7 +166,7 @@ $(document).ready(function(){
 						}
 			$('#delete-form-modal').hide();
 			$('.modal-backdrop').hide();						
-				
+			$('#form-checked-del').remove();		
 			
 			
 			}
@@ -180,6 +180,7 @@ $(document).ready(function(){
 		
 		
 		} 	
+		
 		
 });
 
@@ -315,7 +316,7 @@ $("#selectrole").change(function(){
 					}
 					//$('.info_conf').remove();
 						$('.del-modal-content').remove();
-						$('.modal-dialog').append(function(){
+						$('.modal-dialog-del').append(function(){
 							
 							var res =  '<form id="form-checked-del"><div class="modal-content del-modal-content">' +
 						  '<div class="modal-header">' +
@@ -338,7 +339,8 @@ $("#selectrole").change(function(){
 					
 				}
 				
-				$("#form-checked")[0].reset();			
+				$("#form-checked")[0].reset();	
+							
 					
 		        }
 		        
