@@ -27,6 +27,7 @@ foreach ($res as $items){
             
 
         );
+		$result['status'] = true;
 		$result['error']= null;
 } else  {
    $result = array(
@@ -34,7 +35,9 @@ foreach ($res as $items){
             
 
         );
-		$result['error']= 'Database error: user not found';
+		$result['error'] = 'Database error: user not found';
+		$result['status'] = false;
+		
 }
 
 
@@ -42,7 +45,7 @@ foreach ($res as $items){
 }
 
 
-
+	
 		
 		
 header('Content-type: text/json; charset=utf-8');
