@@ -30,16 +30,16 @@ if ($name !=null && $username != null && $role != null){
 	$sql = "SELECT `id`, `name`,  `role`, `status` FROM `users_system` WHERE `users_system`.`id` = LAST_INSERT_ID()";
 	$res = mysqli_query ($conn, $sql);	
 	foreach ($res as $items){
-	$users['id'] = $items['id'];
-	$users['name'] = $items['name'];
-	$users['role'] = $items['role'];
-	$users['status'] = $items['status'];
+	$user['id'] = $items['id'];
+	$user['name'] = $items['name'];
+	$user['role'] = $items['role'];
+	$user['status'] = $items['status'];
 	
 }     
     $result = array(
             'status' => true,
 			'error' => $null,
-			'users' => $users,
+			'user' => $user,
 			
 			);
 	}

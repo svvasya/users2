@@ -20,12 +20,17 @@ elseif ($_POST['event'] == 0 && $_POST['event2'] == 0 ){
 }
 
 elseif ($_POST['event'] != 0 || $_POST['event2'] != 0 && isset($_POST['check-user']))  {
-	$error = null;
+	
+	
+foreach ($request['check-user'] as $items){	
+$sql = "SELECT `id` FROM `users_system` WHERE `id` = '" .$items."' ";
+$res_id = mysqli_query ($conn, $sql);
+//print_r ($res_id);
+$count = mysqli_num_rows($res_id);
 }
+if( $count > 0 ) {
 	
-	
-	
-	if ($_POST['event'] == 3 || $_POST['event2'] == 3) {
+		if ($_POST['event'] == 3 || $_POST['event2'] == 3) {
 		
 		
 		foreach ($request['check-user'] as $items){
@@ -96,6 +101,21 @@ foreach ($res as $item){
 	//print_r($result);
 	
 }
+
+	$error = null;
+
+}
+else {
+	
+	$error['code'] = '100';		
+	$error['message'] = 'Database error: user not found';	
+	
+}
+}
+
+	
+	
+	
 
 
 

@@ -15,27 +15,27 @@ $("body").on("submit","#form", function(){
 			
 			$('.table-bordered').append(function(){
 				var res='';
-				if (result.users.role == 1) { var role = "Admin"; }
-					else if  (result.users.role == 0) { var role = "User"; }
-					if (result.users.status == '1') { var status = "<i class=\"fa fa-circle active-circle\"></i>"; }
-					else if  (result.users.status == '0') { var status = "<i class=\"fa fa-circle not-active-circle\"></i>"; }
-				 res+=  '<tr class="trr-'+result.users.id+'">' +
+				if (result.user.role == 1) { var role = "Admin"; }
+					else if  (result.user.role == 0) { var role = "User"; }
+					if (result.user.status == '1') { var status = "<i class=\"fa fa-circle active-circle\"></i>"; }
+					else if  (result.user.status == '0') { var status = "<i class=\"fa fa-circle not-active-circle\"></i>"; }
+				 res+=  '<tr class="trr-'+result.user.id+'">' +
                           '<td class="align-middle">' +
                           '<div class="custom-control custom-control-inline custom-checkbox custom-control-nameless m-0 align-top">' +
-                          '<input type="checkbox" class="custom-control-input" name="check-user[]" value="'+result.users.id+'" id="item-'+result.users.id+'">' +
-                          '<label class="custom-control-label" for="item-'+result.users.id+'"></label>' +
+                          '<input type="checkbox" class="custom-control-input" name="check-user[]" value="'+result.user.id+'" id="item-'+result.user.id+'">' +
+                          '<label class="custom-control-label" for="item-'+result.user.id+'"></label>' +
 						  '</div>' +
                           '</td>' +
-                          '<td class="text-nowrap align-middle">'+result.users.name+'</td>' +
+                          '<td class="text-nowrap align-middle">'+result.user.name+'</td>' +
                           '<td class="text-nowrap align-middle"><span>'+role+'</span></td>' +
 						  '<td class="text-center align-middle">' + status +
 						  '</td>' +
                           '<td class="text-center align-middle">' +
                           '<div class="btn-group align-top">' +
-						  '<button class="btn btn-sm btn-outline-secondary badge btn_edit" type="button" data-toggle="modal"  id="btn_edit" data-id="'+result.users.id+'" data-target="#user-form-modal">Edit</button>' +
-                          '<button class="btn btn-sm btn-outline-secondary badge"   type="button" data-toggle="modal"  data-target="#delete-form-modal-'+result.users.id+'" data-id="'+result.users.id+'" ><i class="fa fa-trash"></i></button>' +
+						  '<button class="btn btn-sm btn-outline-secondary badge btn_edit" type="button" data-toggle="modal"  id="btn_edit" data-id="'+result.user.id+'" data-target="#user-form-modal">Edit</button>' +
+                          '<button class="btn btn-sm btn-outline-secondary badge"   type="button" data-toggle="modal"  data-target="#delete-form-modal-'+result.user.id+'" data-id="'+result.user.id+'" ><i class="fa fa-trash"></i></button>' +
 				          '</div>' +
-						  '<div class="modal" tabindex="-1" role="dialog" id="delete-form-modal-'+result.users.id+'">' +
+						  '<div class="modal" tabindex="-1" role="dialog" id="delete-form-modal-'+result.user.id+'">' +
 						  '<div class="modal-dialog" role="document">' +
 						  '<div class="modal-content">' +
 						  '<div class="modal-header">' +
@@ -45,11 +45,11 @@ $("body").on("submit","#form", function(){
 						  '</button>' +
 						  '</div>' +
 						  '<div class="modal-body">' +
-						  '<p>Are you sure want delete user <b>'+result.users.name+'</b>?</p>' +
+						  '<p>Are you sure want delete user <b>'+result.user.name+'</b>?</p>' +
 						  '</div>' +
 						  '<div class="modal-footer">' 	+				  
 						  '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>' +
-						  '<button type="button" class="btn btn-primary userinfo" data-id="'+result.users.id+'">Delete</button>' +
+						  '<button type="button" class="btn btn-primary userinfo" data-id="'+result.user.id+'">Delete</button>' +
 						  '</div>' +
 						  '</div>' +
 						  '</div>' +
@@ -123,7 +123,19 @@ $("#userid").attr('value', userid);
 		}
 		else {
 			
-			$('.modal-backdrop').hide();
+		
+			$('#delete-form-modal-'+userid+'').hide();
+			$('#chek_edit_conf').show();
+						
+						$('.info_conf').remove();
+						$('.modal-footer-conf').remove();
+						$('.modal-content-conf').append(function(){
+							var res = '';
+							res+= '<div class="modal-body info_conf">' + result.error  + '<br/></div><div class="modal-footer modal-footer-conf"><button type="button" id="modalClose2" class="btn btn-secondary" data-dismiss="modal">Ok</button></div></div>';
+							return res;
+					});
+			
+			
 			
 		}
 		}
@@ -246,6 +258,7 @@ $("#selectrole").change(function(){
 					});
 							
 					}
+					else {
 				if (result.event == 'upd') {
 				for(var i=0;i< result.count; i++){
 					var res=  '';
@@ -338,6 +351,8 @@ $("#selectrole").change(function(){
 					});
 					
 				}
+				
+					}
 				
 				$("#form-checked")[0].reset();	
 							
@@ -559,8 +574,17 @@ $(document).ready(function(){
 			}
 			else {
 				
-				alert(result.error);
-				$('.modal-backdrop').hide();
+				
+				$('.modal-backdrop').show();
+				$('#chek_edit_conf').show();
+						
+						$('.info_conf').remove();
+						$('.modal-footer-conf').remove();
+						$('.modal-content-conf').append(function(){
+							var res = '';
+							res+= '<div class="modal-body info_conf">' + result.error  + '<br/></div><div class="modal-footer modal-footer-conf"><button type="button" id="modalClose2" class="btn btn-secondary" data-dismiss="modal">Ok</button></div></div>';
+							return res;
+					});
 			}
 		}
 		
