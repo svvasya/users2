@@ -18,11 +18,11 @@ $("body").on("submit","#form", function(){
 				if (result.user.role == 1) { var role = "Admin"; }
 					else if  (result.user.role == 0) { var role = "User"; }
 					if (result.user.status == '1') { var status = "<i class=\"fa fa-circle active-circle\"></i>"; }
-					else if  (result.user.status == '0') { var status = "<i class=\"fa fa-circle not-active-circle\"></i>"; }
+					else if  (result.user.status == '0') { var status = "<i class=\"fa fa-circle\"></i>"; }
 				 res+=  '<tr class="trr-'+result.user.id+'">' +
                           '<td class="align-middle">' +
                           '<div class="custom-control custom-control-inline custom-checkbox custom-control-nameless m-0 align-top">' +
-                          '<input type="checkbox" class="custom-control-input" name="check-user[]" value="'+result.user.id+'" id="item-'+result.user.id+'">' +
+                          '<input type="checkbox" class="custom-control-input all-items" name="check-user[]" value="'+result.user.id+'" id="item-'+result.user.id+'">' +
                           '<label class="custom-control-label" for="item-'+result.user.id+'"></label>' +
 						  '</div>' +
                           '</td>' +
@@ -33,27 +33,9 @@ $("body").on("submit","#form", function(){
                           '<td class="text-center align-middle">' +
                           '<div class="btn-group align-top">' +
 						  '<button class="btn btn-sm btn-outline-secondary badge btn_edit" type="button" data-toggle="modal"  id="btn_edit" data-id="'+result.user.id+'" data-target="#user-form-modal">Edit</button>' +
-                          '<button class="btn btn-sm btn-outline-secondary badge"   type="button" data-toggle="modal"  data-target="#delete-form-modal-'+result.user.id+'" data-id="'+result.user.id+'" ><i class="fa fa-trash"></i></button>' +
+                          '<button class="btn btn-sm btn-outline-secondary badge btn_del"   type="button" data-toggle="modal" id="btn_del" data-target="#delete-form-modal" data-id="'+result.user.id+'" ><i class="fa fa-trash"></i></button>' +
 				          '</div>' +
-						  '<div class="modal" tabindex="-1" role="dialog" id="delete-form-modal-'+result.user.id+'">' +
-						  '<div class="modal-dialog" role="document">' +
-						  '<div class="modal-content">' +
-						  '<div class="modal-header">' +
-						  '<h5 class="modal-title">Delete user</h5>' +
-						  '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-						  '<span aria-hidden="true">&times;</span>' +
-						  '</button>' +
-						  '</div>' +
-						  '<div class="modal-body">' +
-						  '<p>Are you sure want delete user <b>'+result.user.name+'</b>?</p>' +
-						  '</div>' +
-						  '<div class="modal-footer">' 	+				  
-						  '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>' +
-						  '<button type="button" class="btn btn-primary userinfo" data-id="'+result.user.id+'">Delete</button>' +
-						  '</div>' +
-						  '</div>' +
-						  '</div>' +
-						  '</div>' +
+						  
                           '</td>'  +					 
                           '</tr>'; 
 					
@@ -100,7 +82,78 @@ return false;
 
 });
 
+
 // delete button
+$(document).ready(function(){
+  $("body").on('click','.btn_del' , function() {
+		
+		
+	var userid = $(this).attr('data-id');	
+	$("#userid").attr('value', userid);
+
+	$.ajax({
+		url: 'del_user_bt.php',
+		method: 'post',
+		data:  {userid: userid},		
+		dataType: 'json',				
+		success: function(result){
+				
+				if (result.status != false ){
+				$('.del-modal-content').remove();
+				$('#delete-form-modal').show();
+				$('.modal-backdrop').show();
+										
+				
+				function Res(){				 
+				var res = '<div class="modal-content del-modal-content">'+
+						  '<div class="modal-header">'+
+						 ' <h5 class="modal-title">Delete user</h5>'+
+						 ' <button type="button" class="close" id="modalClose3" data-dismiss="modal" aria-label="Close">'+
+						 ' <span aria-hidden="true">&times;</span>'+
+						  '</button>'+
+						 ' </div>'+
+						 ' <div class="modal-body">'+
+						 ' <p>Are you sure want  delete user <b>'+result.users.name+'</b>?</p>'+
+						 ' </div>'+
+						  '<div class="modal-footer">	'+				  					  
+						 ' <button type="button" class="btn btn-secondary" id="modalClose3" data-dismiss="modal">Cancel</button>'+
+						 ' <button type="button" class="btn btn-primary userinfo" data-id="'+result.users.id+'" id="userinfo_check">Delete</button>'+
+						 ' </div>'+
+						  '</div>' ;		
+		return res;	
+				};
+		$('.modal-dialog-del').append(Res); 	
+			
+			}
+			else {
+				
+					$('.modal-backdrop').show();
+				$('#chek_edit_conf').show();
+						
+						$('.info_conf').remove();
+						$('.modal-footer-conf').remove();
+						$('.modal-content-conf').append(function(){
+							var res = '';
+							res+= '<div class="modal-body info_conf">' + result.error  + '<br/></div><div class="modal-footer modal-footer-conf"><button type="button" id="modalClose2" class="btn btn-secondary" data-dismiss="modal">Ok</button></div></div>';
+							return res;
+					});
+				
+			}
+		}
+		
+		
+	});
+	
+	//$('#delete-form-modal').remove();
+	});
+});
+
+
+
+
+
+
+// delete form
 $(document).ready(function(){
 
  $('body').on("click",'.userinfo',function(){
@@ -120,6 +173,8 @@ $("#userid").attr('value', userid);
 			
 			
 			$('.modal-backdrop').hide();
+			$('#delete-form-modal').hide();
+			
 		}
 		else {
 			
@@ -231,16 +286,36 @@ $("#selectrole").change(function(){
 //check-edit
 //$(document).on("change", "input[type=checkbox]", function() { 
   		$('body').on("click","#checkbox-submit", function() {
-  			var $this 		    = $(this); //submit button selector using ID
-	        var $caption        = $this.html();// We store the html content of the submit button
-	        var form 			= "#form-checked"; //defined the #form ID
-	        var formData        = $(form).serializeArray(); //serialize the form into array
-	        //var route 			= $(form).attr('action'); //get the route using attribute action		
+			
+			
+			
+  			//var $this 		    = $(this); //submit button selector using ID
+	        //var $caption        = $this.html();// We store the html content of the submit button
+	        //var form 			= "#form-checked"; //defined the #form ID
+	        //var formData        = $(form).serializeArray(); //serialize the form into array
 	        
-	    	$.ajax({
+			//var array = [];
+           //$("input:checkbox[name=check-user]:checked").each(function() {
+			   
+			  // $('.all-items:checked').each(function(i,e) {
+              //  array.push($(this).val());
+          // });
+		//	console.log(array);
+		//	var array2 = [];
+		//	for(var i=0;i< array.length; i++){
+		//	de['check-user[]'] = array[i]
+  
+			//}
+	      //  var formData =  array2;
+			//console.log(formData); 
+	    	
+			
+			var event = $('select[name="event"]').val();
+			$.ajax({
 		        method: 'post', 
 		        url: 'check_edit.php', 
-		        data: formData,
+		       // data: formData,
+				data: $('.all-items:checked').serialize()+'&event='+ $('select[name="event"]').val()+'&event2='+ $('select[name="event2"]').val(), //'check-user[]':array.join(),
 				dataType: 'json',		                
 		        success: function(result){
 					//$('.table-bordered tr').remove();
@@ -264,7 +339,7 @@ $("#selectrole").change(function(){
 					var res=  '';
 		$('.trr-'+result.users[i].id+'').replaceWith(function(){					
 					if (result.users[i].status == '1') { var status = "<i class=\"fa fa-circle active-circle\"></i>"; }
-					else if  (result.users[i].status == '0') { var status = "<i class=\"fa fa-circle not-active-circle\"></i>"; }
+					else if  (result.users[i].status == '0') { var status = "<i class=\"fa fa-circle\"></i>"; }
 					if (result.users[i].role == 1) { var role = "Admin"; }
 					else if  (result.users[i].role == 0) { var role = "User"; }
 				res+= 	  '<tr class="trr-'+result.users[i].id+'">' +
@@ -281,27 +356,10 @@ $("#selectrole").change(function(){
                           '<td class="text-center align-middle">' +
                           '<div class="btn-group align-top">' +
 						  '<button class="btn btn-sm btn-outline-secondary badge btn_edit" type="button" data-toggle="modal"  data-target="#user-form-modal" id="btn_edit" data-id="'+result.users[i].id+'">Edit</button>' +
-                          '<button class="btn btn-sm btn-outline-secondary badge"   type="button" data-toggle="modal"  data-target="#delete-form-modal-'+result.users[i].id+'" data-id="'+result.users[i].id+'"><i class="fa fa-trash"></i></button>' +
+                          '<button class="btn btn-sm btn-outline-secondary badge btn_del"   type="button" data-toggle="modal" id="btn_del" data-target="#delete-form-modal" data-id="'+result.users[i].id+'"><i class="fa fa-trash"></i></button>' +
 				          '</div>' +
-						  '<div class="modal" tabindex="-1" role="dialog" id="delete-form-modal-'+result.users[i].id+'">' +
-						  '<div class="modal-dialog" role="document">' +
-						  '<div class="modal-content">' +
-						  '<div class="modal-header">' +
-						  '<h5 class="modal-title">Delete user</h5>' +
-						  '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-						  '<span aria-hidden="true">&times;</span>' +
-						  '</button>' +
-						  '</div>' +
-						  '<div class="modal-body">' +
-						  '<p>Are you sure want  delete user <b>'+result.users[i].name+'</b>?</p>' +
-						  '</div>' +
-						  '<div class="modal-footer">' +						  					  
-						  '<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>' +
-						  '<button type="button" class="btn btn-primary userinfo" data-id="'+result.users[i].id+'" >Delete</button>' +
-						  '</div>' +
-						  '</div>' +
-						  '</div>' +
-						  '</div>' +
+						 
+						  
                           '</td>'  +					 
                           '</tr>';						
 				
@@ -354,7 +412,7 @@ $("#selectrole").change(function(){
 				
 					}
 				
-				$("#form-checked")[0].reset();	
+				//$("#form-checked")[0].reset();	
 							
 					
 		        }
@@ -614,7 +672,7 @@ $("body").on("submit","#edtform", function(){
 			$('.trr-'+result.users.id+'').replaceWith(function(){
 				res+=  '';
 					if (result.users.status == '1') { var status = "<i class=\"fa fa-circle active-circle\"></i>"; }
-					else if  (result.users.status == '0') { var status = "<i class=\"fa fa-circle not-active-circle\"></i>"; }
+					else if  (result.users.status == '0') { var status = "<i class=\"fa fa-circle\"></i>"; }
 					if (result.users.role == 1) { var role = "Admin"; }
 					else if  (result.users.role == 0) { var role = "User"; }
 					
@@ -632,27 +690,9 @@ $("body").on("submit","#edtform", function(){
                           '<td class="text-center align-middle">' +
                           '<div class="btn-group align-top">' +
 						  '<button class="btn btn-sm btn-outline-secondary badge btn_edit" type="button"   id="btn_edit" data-id="'+result.users.id+'" data-target="#user-form-modal">Edit</button>' +
-                          '<button class="btn btn-sm btn-outline-secondary badge"   type="button" data-toggle="modal"  data-target="#delete-form-modal-'+result.users.id+'" data-id="'+result.users.id+'" ><i class="fa fa-trash"></i></button>' +
+                          '<button class="btn btn-sm btn-outline-secondary badge btn_del"   type="button" data-toggle="modal" id="btn_del"  data-target="#delete-form-modal" data-id="'+result.users.id+'" ><i class="fa fa-trash"></i></button>' +
 				          '</div>' +
-						  '<div class="modal" tabindex="-1" role="dialog" id="delete-form-modal-'+result.users.id+'">' +
-						  '<div class="modal-dialog" role="document">' +
-						  '<div class="modal-content">' +
-						  '<div class="modal-header">' +
-						  '<h5 class="modal-title">Delete user</h5>' +
-						  '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
-						  '<span aria-hidden="true">&times;</span>' +
-						  '</button>' +
-						  '</div>' +
-						  '<div class="modal-body">' +
-						  '<p>Are you sure want delete user <b>'+result.users.name+'</b>?</p>' +
-						  '</div>' +
-						  '<div class="modal-footer">' 	+				  
-						  '<button type="button" id="modalClose" class="btn btn-secondary" data-dismiss="modal">Cancel</button>' +
-						  '<button type="button" class="btn btn-primary userinfo" data-id="'+result.users.id+'">Delete</button>' +
-						  '</div>' +
-						  '</div>' +
-						  '</div>' +
-						  '</div>' +
+						  
                           '</td>'  +					 
                           '</tr>'; 
 					

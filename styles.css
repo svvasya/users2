@@ -2,7 +2,12 @@ body{
   margin-top:20px;
   background:#f8f8f8
 }
-.active-circle {
+
+i.fa.fa-circle {
+    color: #ccc;
+}
+
+i.fa.fa-circle.active-circle {
   color: green;
 }
 .not-active-circle {
@@ -20,3 +25,5 @@ body{
 select.btn-sm.btn-outline-secondary.badge {
     text-align: left;
 }
+
+
