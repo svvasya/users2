@@ -2,7 +2,7 @@
    <div class="container">
     <div class="row flex-lg-nowrap">
       <div class="col">
-	    <form id="form-checked">
+	    <!-- <form id="form-checked"> -->
         <div class="row flex-lg-nowrap">
           <div class="col mb-3">
             <div class="e-panel card">
@@ -59,58 +59,39 @@
 
 					  <? 
 					   
-						$i = 0;
-					  foreach ($result as $items){
-						  $i++;
+						
+					  foreach ($result as $items){  ?>
 						 
-						  echo " <tr class=\"trr-".$items[id]."\">
+						 
+						 <tr class="trr-<? echo "$items[id]"?>">
 						  
-                          <td class=\"align-middle\">
-                          <div
-                          class=\"custom-control custom-control-inline custom-checkbox custom-control-nameless m-0 align-top\">
-                          <input type=\"checkbox\" class=\"custom-control-input all-items\" name=\"check-user[]\" value=\"".$items[id]."\" id=\"item-".$items[id]."\">
-                          <label class=\"custom-control-label\" for=\"item-".$items[id]."\"></label>
+                          <td class="align-middle">
+                          <div  class="custom-control custom-control-inline custom-checkbox custom-control-nameless m-0 align-top">
+                          <input type="checkbox" class="custom-control-input all-items" name="check-user[]" value="<? echo $items[id]?>" id="<? echo $items[id]?>">
+                          <label class="custom-control-label" for="<? echo $items[id]?>"></label>
 						  </div>
                           </td>
-                          <td class=\"text-nowrap align-middle\">"  .$items[name]. "</td>
-                          <td class=\"text-nowrap align-middle\"><span>";
-						  if ($items[role] == 1) { echo "Admin"; }
-						  elseif  ($items[role] == 0) { echo 	"User"; }
-						 echo "</span></td>  <td class=\"text-center align-middle\">";
-						  if ($items[status] == 1) { echo "<i class=\"fa fa-circle active-circle\"></i> "; }
-						  elseif  ($items[status] == 0) { echo 	"<i class=\"fa fa-circle not-active-circle\"></i>"; }
-						  echo  "</td>
-                          <td class=\"text-center align-middle\">
-                          <div class=\"btn-group align-top\">
-						  <button class=\"btn btn-sm btn-outline-secondary badge btn_edit\" type=\"button\"   data-id=".$items[id]."  id=\"btn_edit\" data-target=\"#user-form-modal\">Edit</button>
-                          <button class=\"btn btn-sm btn-outline-secondary badge\"   type=\"button\" data-toggle=\"modal\" data-target=\"#delete-form-modal-".$items[id]."\" data-id=".$items[id]."><i class=\"fa fa-trash\"></i></button>
+                          <td class="text-nowrap align-middle"><? echo $items[name]?> </td>
+                          <td class="text-nowrap align-middle"><span>
+						<?  if ($items[role] == 1) { echo "Admin"; }
+						  elseif  ($items[role] == 0) { echo 	"User"; } ?>
+						 </span></td>  <td class="text-center align-middle">
+						 <?  if ($items[status] == 1) { echo "<i class=\"fa fa-circle active-circle\"></i> "; }
+						  elseif  ($items[status] == 0) { echo 	"<i class=\"fa fa-circle\"></i>"; } ?>
+						  </td>
+                          <td class="text-center align-middle">
+                          <div class="btn-group align-top">
+						  <button class="btn btn-sm btn-outline-secondary badge btn_edit" type="button"    id="btn_edit" data-target="#user-form-modal" data-id="<?echo $items[id]?>" >Edit</button>
+                          <button class="btn btn-sm btn-outline-secondary badge btn_del"   type="button" id="btn_del" data-target="#delete-form-modal" data-id="<? echo $items[id] ?>"><i class="fa fa-trash"></i></button>
 				          </div>
-						  <div class=\"modal\" tabindex=\"-1\" role=\"dialog\" id=\"delete-form-modal-".$items[id]."\">
-						  <div class=\"modal-dialog\" role=\"document\">
-						  <div class=\"modal-content\">
-						  <div class=\"modal-header\">
-						  <h5 class=\"modal-title\">Delete user</h5>
-						  <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
-						  <span aria-hidden=\"true\">&times;</span>
-						  </button>
-						  </div>
-						  <div class=\"modal-body\">
-						  <p>Are you sure delete user <b>" .$items[name]. "</b>?</p>
-						  </div>
-						  <div class=\"modal-footer\">
-						  <button type=\"button\" class=\"btn btn-secondary\" data-dismiss=\"modal\">Cancel</button>
-						  <button type=\"button\" class=\"btn btn-primary userinfo\" data-id=".$items[id]." >Delete</button>
-						  </div>
-						  </div>
-						  </div>
-						  </div>  
+						  
                           </td>						 
-                          </tr>	 ";
+                          </tr>	
 						  
 						  
-					  }
+					 <? } ?>
                        
-					  ?>		
+					  		
 
 			
 					  </tbody>
@@ -145,7 +126,7 @@
         </div>
 		
 		
-		</form>
+	<!--	</form>  -->
 		 </div>
           </div>
         </div>
@@ -206,7 +187,7 @@
  </div>
  </div>
 
-
+ <!-- Confirm Form Modal -->
 
 <div class="modal" tabindex="-1" role="dialog" id="chek_edit_conf">
 						  <div class="modal-dialog" role="document">
@@ -230,6 +211,34 @@
 
 
 
+
+ <!-- Delete Form Modal 
+
+<div class="modal" tabindex="-1" role="dialog" id="delete-form-modal-"<?//echo $items[id]?>"\">
+						  <div class="modal-dialog" role="document">
+						  <div class="modal-content">
+						  <div class="modal-header">
+						  <h5 class="modal-title">Delete user</h5>
+						  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+						  </button>
+						  </div>
+						  <div class="modal-body">
+						  <p>Are you sure want delete user <b><?//echo $items[name]?> "</b>?</p>
+						  </div>
+						  <div class="modal-footer">
+						  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+						  <button type="button" class="btn btn-primary userinfo" data-id="<?//echo $items[id]?>" >Delete</button>
+						  </div>
+						  </div>
+						  </div>
+						  </div>  
+						  
+						  
+	-->					  
+						  
+						  
+						  
 <div class="modal" tabindex="-1" role="dialog" id="delete-form-modal">
 						  <div class="modal-dialog modal-dialog-del" role="document">
 						  <div class="modal-content del-modal-content">
